@@ -1,3 +1,11 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [CopyToClipboardHelper.cs](./CS/gridCopyToClipboardExample/CopyToClipboardHelper.cs) (VB: [CopyToClipboardHelper.vb](./VB/gridCopyToClipboardExample/CopyToClipboardHelper.vb))
+* [Employee.cs](./CS/gridCopyToClipboardExample/Employee.cs) (VB: [Employee.vb](./VB/gridCopyToClipboardExample/Employee.vb))
+* [Form1.cs](./CS/gridCopyToClipboardExample/Form1.cs) (VB: [Form1.vb](./VB/gridCopyToClipboardExample/Form1.vb))
+* [Program.cs](./CS/gridCopyToClipboardExample/Program.cs) (VB: [Program.vb](./VB/gridCopyToClipboardExample/Program.vb))
+<!-- default file list end -->
 # How to copy cell data in an Excel format (BIFF8) to the clipboard using XL Export library
 
 
