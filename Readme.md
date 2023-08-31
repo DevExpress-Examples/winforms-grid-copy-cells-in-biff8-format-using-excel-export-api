@@ -3,24 +3,52 @@
 [![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T266171)
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
-<!-- default file list -->
-*Files to look at*:
+
+# WinForms Data Grid - Copy selected cell values to the clipboard in BIFF8 format using Excel Export API
+
+This example demonstrates how to use the DevExpress Excel Export API to export the values in selected grid cells in BIFF8 format and copy them to the clipboard. This allows you to paste clipboard data to an MS Excel document maintaining appearance and formatting settings (text alignment, borders, background color, and font settings).
+
+![Copy selected cell values to the clipboard using Excel Export API in BIFF8 format](https://raw.githubusercontent.com/DevExpress-Examples/how-to-copy-cell-data-in-an-excel-format-biff8-to-the-clipboard-using-xl-export-library-t266171/15.1.4+/media/a605af40-2950-11e5-80bf-00155d62480c.png)
+
+See the implementation of the `CopyToClipboardBIFF8Helper` class for details:
+
+* Create an `IXlDocument` document and populate it with columns and rows. The Excel Export API writes a document directly to the stream. Note that you should first add all the columns to the sheet and then add the rows.
+  ```csharp
+  MemoryStream CreateBIFF8DataStream() {
+      IXlExporter exporter = XlExport.CreateExporter(XlDocumentFormat.Xls);
+      MemoryStream dataStream = new MemoryStream();
+      using(IXlDocument document = exporter.CreateDocument(dataStream)) {
+          using(IXlSheet sheet = document.CreateSheet()) {
+              ExportColumns(sheet);
+              ExportRows(sheet);
+              this.sheetName = sheet.Name;
+              this.dataRange = sheet.DataRange;
+          }
+      }
+      dataStream.Position = 0;
+      return dataStream;
+  }
+  ```
+* When the BIFF8 stream is ready, add the path to the data in the workbook to the clipboard. The `CreateLinkDataStream` method creates a memory stream.
+  ```csharp
+  MemoryStream CreateLinkDataStream() {
+      string link = string.Format("Excel\0[Book1]{0}\0{1}:{2}\0\0", sheetName, GetR1C1(this.dataRange.TopLeft), GetR1C1(this.dataRange.BottomRight));
+      byte[] linkData = DXEncoding.Default.GetBytes(link);
+      return new MemoryStream(linkData);
+  }
+  ```
+* Handle the `GridControl.ProcessGridKey` event to copy selected grid cells to the clipboard in BIFF8 format:
+  ```csharp
+  void gridControl1_ProcessGridKey(object sender, KeyEventArgs e) {
+      if(e.Control && e.KeyCode == Keys.C) {
+          _copyToClipboardBIFF8Helper.CopySelectionToClipboard(gridView1);
+          e.Handled = true;
+      }
+  }
+  ```
+
+
+## Files to Review
 
 * [CopyToClipboardHelper.cs](./CS/gridCopyToClipboardExample/CopyToClipboardHelper.cs) (VB: [CopyToClipboardHelper.vb](./VB/gridCopyToClipboardExample/CopyToClipboardHelper.vb))
-* [Employee.cs](./CS/gridCopyToClipboardExample/Employee.cs) (VB: [Employee.vb](./VB/gridCopyToClipboardExample/Employee.vb))
 * [Form1.cs](./CS/gridCopyToClipboardExample/Form1.cs) (VB: [Form1.vb](./VB/gridCopyToClipboardExample/Form1.vb))
-* [Program.cs](./CS/gridCopyToClipboardExample/Program.cs) (VB: [Program.vb](./VB/gridCopyToClipboardExample/Program.vb))
-<!-- default file list end -->
-# How to copy cell data in an Excel format (BIFF8) to the clipboard using XL Export library
-
-
-<p>This example demonstrates how to build data in BIFF8 format and pass it to the clipboard. This approach allows you to copy cells data within appearance (text alignment, borders, background color and font settings) and keep the cells number format as is while copy&paste data from a GridControl to an Excel-like document.<br /><br /><img src="https://raw.githubusercontent.com/DevExpress-Examples/how-to-copy-cell-data-in-an-excel-format-biff8-to-the-clipboard-using-xl-export-library-t266171/15.1.4+/media/a605af40-2950-11e5-80bf-00155d62480c.png"><br />                                                                        <br /><strong>Please see the "Implementation Details" (click the corresponding link below this text) to learn more about technical aspects of this approach implementation.</strong></p>
-
-
-<h3>Description</h3>
-
-<p>All the functionality to&nbsp;construct data in the BIFF8 format is encapsulated in the&nbsp;<strong>CopyToClipboardBIFF8Helper</strong>&nbsp;helper class. The main point of this approach is usage of the&nbsp;<strong>XL Export library</strong>&nbsp;for creating the BIFF8 data stream.<br /><br />First, a&nbsp;IXlDocument document is created and filled by columns and rows. Note that the XL Export library writes a document directly to the stream and requires adding&nbsp;all columns into a worksheet first and only then rows. The order is essential in this case. <br /><br />When the BIFF8 stream is ready, it is also necessary to add information of a path to data in the workbook&nbsp;to the clipboard. The link stream is constructed in the&nbsp;<strong>CreateLinkDataStream</strong> method. &nbsp;<br /><br />To substitute the default copy&amp;paste algorithm with this custom one, handle the<strong>&nbsp;GridControl.ProcessGridKey</strong>&nbsp;event and pass a&nbsp;<strong>GridView</strong>&nbsp;instance to the<strong>&nbsp;CopyToClipboardBIFF8Helper.CopySelectionToClipboard</strong>&nbsp;method.</p>
-
-<br/>
-
-
