@@ -1,7 +1,4 @@
-﻿Imports System
-Imports System.Collections.Generic
 Imports System.Drawing
-Imports System.Linq
 Imports System.IO
 Imports System.Windows.Forms
 Imports DevExpress.Export.Xl
@@ -13,22 +10,24 @@ Imports DevExpress.XtraGrid.Drawing
 Imports System.Reflection
 
 Namespace gridCopyToClipboardExample
+
     Public Class CopyToClipboardBIFF8Helper
+
         Private view As GridView
+
         Private sheetName As String
+
         Private dataRange As XlCellRange
+
         Private Sub ExportColumns(ByVal sheet As IXlSheet)
-            For Each column As GridColumn In Me.view.Columns
+            For Each column As GridColumn In view.Columns
                 ExportColumn(sheet, column)
-            Next column
+            Next
         End Sub
 
         Private Sub ExportColumn(ByVal sheet As IXlSheet, ByVal gridColumn As GridColumn)
             ' Skip hidden column
-            If Not gridColumn.Visible Then
-                Return
-            End If
-
+            If Not gridColumn.Visible Then Return
             Using column As IXlColumn = sheet.CreateColumn()
                 ' Setup number format
                 If gridColumn.DisplayFormat.FormatType = FormatType.DateTime Then
@@ -40,13 +39,13 @@ Namespace gridCopyToClipboardExample
         End Sub
 
         Private Sub ExportRows(ByVal sheet As IXlSheet)
-            Dim selectedRows() As Integer = Me.view.GetSelectedRows()
+            Dim selectedRows As Integer() = view.GetSelectedRows()
             For Each gridRowHandle As Integer In selectedRows
                 view.UnselectRow(gridRowHandle)
                 view.RefreshRow(gridRowHandle)
                 ExportRow(sheet, gridRowHandle)
                 view.SelectRow(gridRowHandle)
-            Next gridRowHandle
+            Next
         End Sub
 
         Private Sub ExportRow(ByVal sheet As IXlSheet, ByVal gridRowHandle As Integer)
@@ -56,36 +55,27 @@ Namespace gridCopyToClipboardExample
         End Sub
 
         Private Sub ExportCells(ByVal row As IXlRow, ByVal gridRowHandle As Integer)
-            For Each column As GridColumn In Me.view.Columns
+            For Each column As GridColumn In view.Columns
                 If column.Visible Then
                     ExportCell(row, gridRowHandle, column)
                 End If
-            Next column
+            Next
         End Sub
 
         Private Sub ExportCell(ByVal row As IXlRow, ByVal gridRowHandle As Integer, ByVal gridColumn As GridColumn)
             Using cell As IXlCell = row.CreateCell()
                 ' Set cell value
-                cell.Value = XlVariantValue.FromObject(Me.view.GetRowCellValue(gridRowHandle, gridColumn))
-
+                cell.Value = XlVariantValue.FromObject(view.GetRowCellValue(gridRowHandle, gridColumn))
                 ' Get cell appearance
                 Dim appearance As AppearanceObject = GetCellAppearance(gridRowHandle, gridColumn)
-
                 ' Apply alignment
-                Dim alignment As New XlCellAlignment() With {.WrapText = appearance.TextOptions.WordWrap.HasFlag(WordWrap.Wrap), .VerticalAlignment = ConvertAlignment(appearance.TextOptions.VAlignment), .HorizontalAlignment = ConvertAlignment(appearance.TextOptions.HAlignment)}
+                Dim alignment As XlCellAlignment = New XlCellAlignment() With {.WrapText = appearance.TextOptions.WordWrap.HasFlag(WordWrap.Wrap), .VerticalAlignment = ConvertAlignment(appearance.TextOptions.VAlignment), .HorizontalAlignment = ConvertAlignment(appearance.TextOptions.HAlignment)}
                 cell.ApplyFormatting(alignment)
-
                 ' Apply borders
                 Dim borderColor As Color = appearance.GetBorderColor()
-                If Not DXColor.IsTransparentOrEmpty(borderColor) Then
-                    cell.ApplyFormatting(XlBorder.OutlineBorders(borderColor))
-                End If
-
+                If Not DXColor.IsTransparentOrEmpty(borderColor) Then cell.ApplyFormatting(XlBorder.OutlineBorders(borderColor))
                 ' Apply fill
-                If appearance.Options.UseBackColor Then
-                    cell.ApplyFormatting(XlFill.SolidFill(appearance.BackColor))
-                End If
-
+                If appearance.Options.UseBackColor Then cell.ApplyFormatting(XlFill.SolidFill(appearance.BackColor))
                 ' Apply font
                 Dim appearanceFont As Font = appearance.Font
                 Dim font As XlFont = XlFont.CustomFont(appearanceFont.Name)
@@ -94,9 +84,7 @@ Namespace gridCopyToClipboardExample
                 font.Italic = appearanceFont.Italic
                 font.StrikeThrough = appearanceFont.Strikeout
                 font.Underline = If(appearanceFont.Underline, XlUnderlineType.Single, XlUnderlineType.None)
-                If appearance.Options.UseForeColor Then
-                    font.Color = appearance.ForeColor
-                End If
+                If appearance.Options.UseForeColor Then font.Color = appearance.ForeColor
                 cell.ApplyFormatting(font)
             End Using
         End Sub
@@ -107,10 +95,9 @@ Namespace gridCopyToClipboardExample
             If cellInfo Is Nothing Then
                 cellInfo = New GridCellInfo(New GridColumnInfoArgs(gridColumn), New GridDataRowInfo(viewInfo, gridRowHandle, view.GetRowLevel(gridRowHandle)), Rectangle.Empty)
             End If
+
             Dim [me] As MethodInfo = viewInfo.GetType().GetMethod("UpdateCellAppearance", BindingFlags.Instance Or BindingFlags.NonPublic Or BindingFlags.DeclaredOnly)
-            If [me] IsNot Nothing Then
-                [me].Invoke(viewInfo, New Object() {cellInfo, True })
-            End If
+            If [me] IsNot Nothing Then [me].Invoke(viewInfo, New Object() {cellInfo, True})
             viewInfo.UpdateCellAppearance(cellInfo)
             Return cellInfo.Appearance
         End Function
@@ -124,6 +111,7 @@ Namespace gridCopyToClipboardExample
                 Case VertAlignment.Bottom
                     Return XlVerticalAlignment.Bottom
             End Select
+
             Return XlVerticalAlignment.Bottom
         End Function
 
@@ -142,23 +130,23 @@ Namespace gridCopyToClipboardExample
 
         Private Function CreateBIFF8DataStream() As MemoryStream
             Dim exporter As IXlExporter = XlExport.CreateExporter(XlDocumentFormat.Xls)
-            Dim dataStream As New MemoryStream()
+            Dim dataStream As MemoryStream = New MemoryStream()
             Using document As IXlDocument = exporter.CreateDocument(dataStream)
                 Using sheet As IXlSheet = document.CreateSheet()
                     ExportColumns(sheet)
                     ExportRows(sheet)
-                    Me.sheetName = sheet.Name
-                    Me.dataRange = sheet.DataRange
+                    sheetName = sheet.Name
+                    dataRange = sheet.DataRange
                 End Using
             End Using
+
             dataStream.Position = 0
             Return dataStream
         End Function
 
-
         Private Function CreateLinkDataStream() As MemoryStream
-            Dim link As String = String.Format("Excel" & ControlChars.NullChar & "[Book1]{0}" & ControlChars.NullChar & "{1}:{2}" & ControlChars.NullChar & ControlChars.NullChar, sheetName, GetR1C1(Me.dataRange.TopLeft), GetR1C1(Me.dataRange.BottomRight))
-            Dim linkData() As Byte = DXEncoding.Default.GetBytes(link)
+            Dim link As String = String.Format("Excel" & Microsoft.VisualBasic.Constants.vbNullChar & "[Book1]{0}" & Microsoft.VisualBasic.Constants.vbNullChar & "{1}:{2}" & Microsoft.VisualBasic.Constants.vbNullChar & Microsoft.VisualBasic.Constants.vbNullChar, sheetName, GetR1C1(dataRange.TopLeft), GetR1C1(dataRange.BottomRight))
+            Dim linkData As Byte() = DXEncoding.Default.GetBytes(link)
             Return New MemoryStream(linkData)
         End Function
 
@@ -175,12 +163,11 @@ Namespace gridCopyToClipboardExample
 
             Dim biff8DataStream As MemoryStream = CreateBIFF8DataStream()
             Dim linkDataStream As MemoryStream = CreateLinkDataStream()
-            Dim dataObject As New DataObject()
+            Dim dataObject As DataObject = New DataObject()
             dataObject.SetData("Biff8", biff8DataStream)
             dataObject.SetData("Link", linkDataStream)
-            Clipboard.Clear()
+            Call Clipboard.Clear()
             Clipboard.SetDataObject(dataObject, True)
         End Sub
     End Class
-
 End Namespace

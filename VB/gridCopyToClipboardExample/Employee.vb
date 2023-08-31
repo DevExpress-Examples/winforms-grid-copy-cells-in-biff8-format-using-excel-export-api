@@ -1,12 +1,16 @@
-﻿Imports System
+Imports System
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.Text
 Imports System.Threading.Tasks
 
 Namespace gridCopyToClipboardExample
+
     Friend Class Employee
-        Public Sub New(ByVal id As Integer, ByVal name As String, ByVal salary As Double, ByVal bonus As Double, ByVal department As String, ByVal hired As Date)
+
+        Private _Id As Integer, _Name As String, _Salary As Double, _Bonus As Double, _Department As String, _Hired As DateTime
+
+        Public Sub New(ByVal id As Integer, ByVal name As String, ByVal salary As Double, ByVal bonus As Double, ByVal department As String, ByVal hired As System.DateTime)
             Me.Id = id
             Me.Name = name
             Me.Salary = salary
@@ -15,58 +19,63 @@ Namespace gridCopyToClipboardExample
             Me.Hired = hired
         End Sub
 
-        Private privateId As Integer
-        Public Property Id() As Integer
+        Public Property Id As Integer
             Get
-                Return privateId
+                Return _Id
             End Get
+
             Private Set(ByVal value As Integer)
-                privateId = value
+                _Id = value
             End Set
         End Property
-        Private privateName As String
-        Public Property Name() As String
+
+        Public Property Name As String
             Get
-                Return privateName
+                Return _Name
             End Get
+
             Private Set(ByVal value As String)
-                privateName = value
+                _Name = value
             End Set
         End Property
-        Private privateSalary As Double
-        Public Property Salary() As Double
+
+        Public Property Salary As Double
             Get
-                Return privateSalary
+                Return _Salary
             End Get
+
             Private Set(ByVal value As Double)
-                privateSalary = value
+                _Salary = value
             End Set
         End Property
-        Private privateBonus As Double
-        Public Property Bonus() As Double
+
+        Public Property Bonus As Double
             Get
-                Return privateBonus
+                Return _Bonus
             End Get
+
             Private Set(ByVal value As Double)
-                privateBonus = value
+                _Bonus = value
             End Set
         End Property
-        Private privateDepartment As String
-        Public Property Department() As String
+
+        Public Property Department As String
             Get
-                Return privateDepartment
+                Return _Department
             End Get
+
             Private Set(ByVal value As String)
-                privateDepartment = value
+                _Department = value
             End Set
         End Property
-        Private privateHired As Date
-        Public Property Hired() As Date
+
+        Public Property Hired As DateTime
             Get
-                Return privateHired
+                Return _Hired
             End Get
-            Private Set(ByVal value As Date)
-                privateHired = value
+
+            Private Set(ByVal value As DateTime)
+                _Hired = value
             End Set
         End Property
     End Class

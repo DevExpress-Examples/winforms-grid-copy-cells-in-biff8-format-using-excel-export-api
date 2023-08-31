@@ -1,5 +1,7 @@
-﻿Namespace gridCopyToClipboardExample
-    Partial Public Class Form1
+Namespace gridCopyToClipboardExample
+
+    Partial Class Form1
+
         ''' <summary>
         ''' Required designer variable.
         ''' </summary>
@@ -10,14 +12,14 @@
         ''' </summary>
         ''' <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-            If disposing AndAlso (components IsNot Nothing) Then
-                components.Dispose()
+            If disposing AndAlso (Me.components IsNot Nothing) Then
+                Me.components.Dispose()
             End If
+
             MyBase.Dispose(disposing)
         End Sub
 
-        #Region "Windows Form Designer generated code"
-
+#Region "Windows Form Designer generated code"
         ''' <summary>
         ''' Required method for Designer support - do not modify
         ''' the contents of this method with the code editor.
@@ -33,8 +35,8 @@
             Me.gridColumn6 = New DevExpress.XtraGrid.Columns.GridColumn()
             Me.panel1 = New System.Windows.Forms.Panel()
             Me.lblNote = New System.Windows.Forms.Label()
-            DirectCast(Me.gridControl1, System.ComponentModel.ISupportInitialize).BeginInit()
-            DirectCast(Me.gridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType((Me.gridControl1), System.ComponentModel.ISupportInitialize).BeginInit()
+            CType((Me.gridView1), System.ComponentModel.ISupportInitialize).BeginInit()
             Me.panel1.SuspendLayout()
             Me.SuspendLayout()
             ' 
@@ -46,14 +48,15 @@
             Me.gridControl1.Name = "gridControl1"
             Me.gridControl1.Size = New System.Drawing.Size(986, 456)
             Me.gridControl1.TabIndex = 0
-            Me.gridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() { Me.gridView1})
+            Me.gridControl1.ViewCollection.AddRange(New DevExpress.XtraGrid.Views.Base.BaseView() {Me.gridView1})
+            AddHandler Me.gridControl1.ProcessGridKey, New System.Windows.Forms.KeyEventHandler(AddressOf Me.gridControl1_ProcessGridKey)
             ' 
             ' gridView1
             ' 
-            Me.gridView1.Appearance.OddRow.BackColor = System.Drawing.Color.FromArgb((CInt((CByte(255)))), (CInt((CByte(224)))), (CInt((CByte(192)))))
-            Me.gridView1.Appearance.OddRow.Font = New System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, (CByte(0)))
+            Me.gridView1.Appearance.OddRow.BackColor = System.Drawing.Color.FromArgb((CInt(((CByte((255)))))), (CInt(((CByte((224)))))), (CInt(((CByte((192)))))))
+            Me.gridView1.Appearance.OddRow.Font = New System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, (CByte((0))))
             Me.gridView1.Appearance.OddRow.Options.UseBackColor = True
-            Me.gridView1.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() { Me.gridColumn1, Me.gridColumn2, Me.gridColumn3, Me.gridColumn4, Me.gridColumn5, Me.gridColumn6})
+            Me.gridView1.Columns.AddRange(New DevExpress.XtraGrid.Columns.GridColumn() {Me.gridColumn1, Me.gridColumn2, Me.gridColumn3, Me.gridColumn4, Me.gridColumn5, Me.gridColumn6})
             Me.gridView1.GridControl = Me.gridControl1
             Me.gridView1.Name = "gridView1"
             Me.gridView1.OptionsSelection.MultiSelect = True
@@ -133,7 +136,7 @@
             ' lblNote
             ' 
             Me.lblNote.AutoSize = True
-            Me.lblNote.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, (CByte(204)))
+            Me.lblNote.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, (CByte((204))))
             Me.lblNote.Location = New System.Drawing.Point(12, 14)
             Me.lblNote.Name = "lblNote"
             Me.lblNote.Size = New System.Drawing.Size(517, 13)
@@ -149,26 +152,32 @@
             Me.Controls.Add(Me.panel1)
             Me.Name = "Form1"
             Me.Text = "XtraGrid copy to clipboard example"
-            DirectCast(Me.gridControl1, System.ComponentModel.ISupportInitialize).EndInit()
-            DirectCast(Me.gridView1, System.ComponentModel.ISupportInitialize).EndInit()
+            CType((Me.gridControl1), System.ComponentModel.ISupportInitialize).EndInit()
+            CType((Me.gridView1), System.ComponentModel.ISupportInitialize).EndInit()
             Me.panel1.ResumeLayout(False)
             Me.panel1.PerformLayout()
             Me.ResumeLayout(False)
-
         End Sub
 
-        #End Region
+#End Region
+        Private gridControl1 As DevExpress.XtraGrid.GridControl
 
-        Private WithEvents gridControl1 As DevExpress.XtraGrid.GridControl
         Private gridView1 As DevExpress.XtraGrid.Views.Grid.GridView
+
         Private panel1 As System.Windows.Forms.Panel
+
         Private gridColumn1 As DevExpress.XtraGrid.Columns.GridColumn
+
         Private gridColumn2 As DevExpress.XtraGrid.Columns.GridColumn
+
         Private gridColumn3 As DevExpress.XtraGrid.Columns.GridColumn
+
         Private gridColumn4 As DevExpress.XtraGrid.Columns.GridColumn
+
         Private gridColumn5 As DevExpress.XtraGrid.Columns.GridColumn
+
         Private gridColumn6 As DevExpress.XtraGrid.Columns.GridColumn
+
         Private lblNote As System.Windows.Forms.Label
     End Class
 End Namespace
-
