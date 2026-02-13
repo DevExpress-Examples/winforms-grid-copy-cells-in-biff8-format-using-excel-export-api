@@ -54,7 +54,7 @@ See the implementation of the `CopyToClipboardBIFF8Helper` class for details:
 * [CopyToClipboardHelper.cs](./CS/gridCopyToClipboardExample/CopyToClipboardHelper.cs) (VB: [CopyToClipboardHelper.vb](./VB/gridCopyToClipboardExample/CopyToClipboardHelper.vb))
 * [Form1.cs](./CS/gridCopyToClipboardExample/Form1.cs) (VB: [Form1.vb](./VB/gridCopyToClipboardExample/Form1.vb))
 <!-- feedback -->
-## Does this example address your development requirements/objectives?
+## Does This Example Address Your Development Requirements/Objectives?
 
 [<img src="https://www.devexpress.com/support/examples/i/yes-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=winforms-grid-copy-cells-in-biff8-format-using-excel-export-api&~~~was_helpful=yes) [<img src="https://www.devexpress.com/support/examples/i/no-button.svg"/>](https://www.devexpress.com/support/examples/survey.xml?utm_source=github&utm_campaign=winforms-grid-copy-cells-in-biff8-format-using-excel-export-api&~~~was_helpful=no)
 
